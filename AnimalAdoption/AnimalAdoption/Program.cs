@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using AnimalAdoption.Data;
+using AnimalAdoption.Models;
 
 namespace AnimalAdoption;
 
