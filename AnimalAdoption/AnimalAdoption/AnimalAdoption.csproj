@@ -8,15 +8,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.4"/>
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.4"/>
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.4"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.4"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.6" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4"/>
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\AnimalsAdoption\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\AnimalsAdoption\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\AnimalsAdoption\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\AnimalsAdoption\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\AnimalsAdoption\Index.cshtml" />
     </ItemGroup>
 
 </Project>

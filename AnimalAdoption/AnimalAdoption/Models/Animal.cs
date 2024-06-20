@@ -6,9 +6,8 @@ public class Animal
     
     public string Name { get; set; } = null!;
     public DateOnly DateOfBirth { get; set; }
-    public string Breed { get; set; } = null!;
+    public string Species { get; set; } = null!;
     public string Description { get; set; } = null!;
     public string Image { get; set; } = null!;
-    public string Status { get; set; } = null!;
-    public bool Adopted { get; set; }
+    public bool IsAdopted { get; set; }
 }
