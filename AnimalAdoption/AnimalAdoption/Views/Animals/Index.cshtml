@@ -1,9 +1,5 @@
 @model IEnumerable<AnimalAdoption.Models.Animal>
 
-@{
-    ViewData["Title"] = "Index";
-}
-
 <h1>Index</h1>
 
 <p>
@@ -12,24 +8,11 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Species)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsAdopted)
-            </th>
+            <th>Name</th>
+            <th>Date Of Birth</th>
+            <th>Species</th>
+            <th>Description</th>
+            <th>Image</th>
             <th></th>
         </tr>
     </thead>
@@ -50,9 +33,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Image)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAdopted)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

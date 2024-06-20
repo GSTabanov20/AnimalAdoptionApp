@@ -1,9 +1,5 @@
 @model AnimalAdoption.Models.Animal
 
-@{
-    ViewData["Title"] = "Create";
-}
-
 <h1>Create</h1>
 
 <h4>Animal</h4>
@@ -18,13 +14,17 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DateOfBirth" class="control-label"></label>
-                <input asp-for="DateOfBirth" class="form-control" />
+                <label asp-for="DateOfBirth" class="control-label">Date of birth</label>
+                <input asp-for="DateOfBirth" class="form-control" type="date"/>
                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Species" class="control-label"></label>
-                <input asp-for="Species" class="form-control" />
+                <select asp-for="Species" class="form-control">
+                    <option value="">Select Species</option>
+                    <option value="Dog">Dog</option>
+                    <option value="Cat">Cat</option>
+                </select>
                 <span asp-validation-for="Species" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -37,11 +37,6 @@
                 <input asp-for="Image" class="form-control" type="file"/>
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsAdopted" /> @Html.DisplayNameFor(model => model.IsAdopted)
-                </label>
-            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -52,4 +47,3 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
