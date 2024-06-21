@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AnimalAdoption.Data;
 using AnimalAdoption.Models;
+using Microsoft.CodeAnalysis.Elfie.Model.Map;
 
 namespace AnimalAdoption.Controllers
 {
     public class AnimalsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AnimalsController(ApplicationDbContext context)
+        public AnimalsController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Animals
@@ -54,10 +57,21 @@ namespace AnimalAdoption.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,DateOfBirth,Species,Description,Image,IsAdopted")] Animal animal)
+        public async Task<IActionResult> Create([Bind("Id,Name,DateOfBirth,Species,Gender,Description,IsAdopted")] Animal animal, IFormFile imageFile)
         {
             if (ModelState.IsValid)
             {
+                if (imageFile != null)
+                {
+                    var fileName = Guid.NewGuid() + Path.GetExtension(imageFile.FileName);
+                    var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", fileName);
+                    
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(stream);
+                    }
+                    animal.Image = fileName;
+                }
                 _context.Add(animal);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,7 +100,7 @@ namespace AnimalAdoption.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DateOfBirth,Species,Description,Image,IsAdopted")] Animal animal)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DateOfBirth,Species,Gender,Description,IsAdopted")] Animal animal, IFormFile imageFile)
         {
             if (id != animal.Id)
             {
@@ -97,6 +111,17 @@ namespace AnimalAdoption.Controllers
             {
                 try
                 {
+                    if (imageFile != null)
+                    {
+                        var fileName = Guid.NewGuid() + Path.GetExtension(imageFile.FileName);
+                        var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", fileName);
+                    
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(stream);
+                        }
+                        animal.Image = fileName;
+                    }
                     _context.Update(animal);
                     await _context.SaveChangesAsync();
                 }
@@ -120,7 +145,7 @@ namespace AnimalAdoption.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-            {
+            {   
                 return NotFound();
             }
 
@@ -149,6 +174,24 @@ namespace AnimalAdoption.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public static string CalculateAge(DateOnly dateOfBirth)
+        {
+            var today = DateOnly.FromDateTime(DateTime.Today);
+            var age = today.Year - dateOfBirth.Year;
+
+            if (dateOfBirth > today.AddYears(-age))
+                age--;
+
+            var months = today.Month - dateOfBirth.Month;
+            if (today.Day < dateOfBirth.Day)
+                months--;
+
+            if (months < 0)
+            {
+                months += 12;
+            }
+            return age == 0 ? $"{months} months" : $"{age} years {months} months";
+        }
         private bool AnimalExists(int id)
         {
             return _context.Animals.Any(e => e.Id == id);

@@ -1,3 +1,4 @@
+@using AnimalAdoption.Controllers
 @model IEnumerable<AnimalAdoption.Models.Animal>
 
 <h1>Index</h1>
@@ -9,30 +10,34 @@
     <thead>
         <tr>
             <th>Name</th>
-            <th>Date Of Birth</th>
+            <th>Age</th>
             <th>Species</th>
+            <th>Gender</th>
             <th>Description</th>
             <th>Image</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
+                @AnimalsController.CalculateAge(item.DateOfBirth)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Species)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Image)
+                <img src="~/images/@item.Image" alt="image" width="150" height="150">
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -40,6 +45,6 @@
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
