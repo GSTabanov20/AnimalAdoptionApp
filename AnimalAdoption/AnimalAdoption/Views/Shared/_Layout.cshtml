@@ -9,9 +9,10 @@
 
 </head>
 <body>
-<div class="banner">
+<div class="@(Context.Request.Path == "/" ? "banner" : "")">
+
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-transparent box-shadow mb-3">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-secondary box-shadow mb-3">
         <div class="container-fluid">
             <img class="ms-3" src="~/favicon.ico" alt="logo" width="70" height="70">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"

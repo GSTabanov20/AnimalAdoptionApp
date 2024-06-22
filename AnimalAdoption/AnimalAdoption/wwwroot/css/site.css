@@ -32,3 +32,25 @@ html {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.navbar-nav .nav-link {
+  position: relative;
+}
+
+.navbar-nav .nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  display: block;
+  margin-top: 5px;
+  right: 0;
+  background: #33ceb7;
+  transition: width 0.5s ease;
+}
+
+.navbar-nav .nav-link:hover::after {
+  width: 100%;
+  left: 0;
+  background: #33ceb7;
+}
