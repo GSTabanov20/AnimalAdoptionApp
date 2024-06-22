@@ -9,10 +9,11 @@
 
 </head>
 <body>
+<div class="banner">
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-transparent box-shadow mb-3">
         <div class="container-fluid">
-            <img src="~/favicon.ico" alt="logo" width="70" height="70">
+            <img class="ms-3" src="~/favicon.ico" alt="logo" width="70" height="70">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -20,12 +21,12 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1 navbar-brand">
                     <li class="nav-item">
-                        <a class="nav-link text-dark larger-font" asp-area="" asp-controller="Home" asp-action="Index">Animal Adoption Centre</a>
+                        <a class="nav-link text-white ms-4 fs-3" asp-area="" asp-controller="Home" asp-action="Index">Animal Adoption Centre</a>
                     </li>
                     <li class="nav-item ms-auto">
-                        <a class="nav-link text-dark larger-font" asp-area="" asp-controller="Animals" asp-action="Index">Adopt</a>
+                        <a class="nav-link text-white me-5 fs-3" asp-area="" asp-controller="Animals" asp-action="Index">Adopt</a>
                     </li>
-                <partial name="_LoginPartial"/>
+                    <partial name="_LoginPartial"/>
                 </ul>
             </div>
         </div>
@@ -36,16 +37,11 @@
         @RenderBody()
     </main>
 </div>
-
-<footer class="bg-body-tertiary text-center">
-    <div class="container p-4"></div>
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
-        &copy; 2024 - Animal Adoption Centre - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
-</footer>
+    
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
+</div>
 </body>
 </html>

@@ -64,7 +64,7 @@ namespace AnimalAdoption.Controllers
                 if (imageFile != null)
                 {
                     var fileName = Guid.NewGuid() + Path.GetExtension(imageFile.FileName);
-                    var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", fileName);
+                    var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images/animals", fileName);
                     
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
@@ -114,7 +114,7 @@ namespace AnimalAdoption.Controllers
                     if (imageFile != null)
                     {
                         var fileName = Guid.NewGuid() + Path.GetExtension(imageFile.FileName);
-                        var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", fileName);
+                        var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images/animals", fileName);
                     
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
