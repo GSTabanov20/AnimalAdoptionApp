@@ -1,27 +1,61 @@
 @using AnimalAdoption.Controllers
 @model IEnumerable<AnimalAdoption.Models.Animal>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> UserManager
 
-<h1 class="text-white text-center">Available Animals for Adoption</h1>
+@{
+    var user = UserManager.GetUserAsync(User).Result;
+    var isAdmin = user?.IsAdmin ?? false;
+}
 
-<p>
-    <a class="btn btn-primary" asp-action="Create">Create New</a>
-</p>
-
+@if (Model.Any())
+{
+    <h1 class="text-white text-center">Available Animals for Adoption</h1>
+}
+else
+{
+    <h1 class="text-white text-center position-absolute top-50 start-50 translate-middle">No animals available for adoption at the moment.</h1>
+}
+@if (isAdmin)
+{
+    if (!Model.Any())
+    {
+        <p>
+            <a class="btn btn-primary position-absolute top-50 start-50 translate-middle mt-5" asp-action="Create">Create New</a>
+        </p>
+    }
+    else
+    {
+        <p>
+            <a class="btn btn-primary position-absolute start-50 translate-middle mt-3" asp-action="Create">Create New</a>
+        </p>
+    }
+}
 <div class="row">
     @foreach (var item in Model)
     {
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <img src="~/images/animals/@item.Image" class="card-img-top" alt="image of @item.Name" style="height: 250px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
-                    <p class="card-text">Age: @AnimalsController.CalculateAge(item.DateOfBirth)</p>
-                    <p class="card-text">Gender: @Html.DisplayFor(modelItem => item.Gender)</p>
-                </div>
-                <div class="card-footer">
-                    <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">View Details</a>
+        if (!item.IsAdopted)
+        {
+
+            <div class="col-md-4 mb-4 mt-5">
+                <div class="card h-100">
+                    <img src="~/images/animals/@item.Image" class="card-img-top" alt="image of @item.Name" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                        <p class="card-text">Age: @AnimalsController.CalculateAge(item.DateOfBirth)</p>
+                        <p class="card-text">Gender: @Html.DisplayFor(modelItem => item.Gender)</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a class="btn btn-primary mx-auto" asp-action="Details" asp-route-id="@item.Id">View Details</a>
+                        @if (isAdmin)
+                        {
+                            <a class="btn btn-primary mx-auto" asp-action="Edit" asp-route-id="@item.Id">Modify</a>
+                            <a class="btn btn-danger mx-auto" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    </div>
+
                 </div>
             </div>
-        </div>
+        }
     }
 </div>

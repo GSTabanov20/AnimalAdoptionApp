@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AnimalAdoption.Data;
 using AnimalAdoption.Models;
-using Microsoft.CodeAnalysis.Elfie.Model.Map;
 
 namespace AnimalAdoption.Controllers
 {
@@ -57,7 +51,7 @@ namespace AnimalAdoption.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,DateOfBirth,Species,Gender,Description,IsAdopted")] Animal animal, IFormFile imageFile)
+        public async Task<IActionResult> Create([Bind("Id,Name,DateOfBirth,Species,Gender,Description,IsAdopted,IsAdmin")] Animal animal, IFormFile imageFile)
         {
             if (ModelState.IsValid)
             {
@@ -96,11 +90,9 @@ namespace AnimalAdoption.Controllers
         }
 
         // POST: Animals/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DateOfBirth,Species,Gender,Description,IsAdopted")] Animal animal, IFormFile imageFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DateOfBirth,Species,Gender,Description,IsAdopted,IsAdmin")] Animal animal, IFormFile imageFile)
         {
             if (id != animal.Id)
             {
@@ -190,7 +182,29 @@ namespace AnimalAdoption.Controllers
             {
                 months += 12;
             }
-            return age == 0 ? $"{months} months" : $"{age} years {months} months";
+            
+            var res = "";
+            if (age == 0 && months == 0)
+            {
+                res = "newborn";
+            }
+            else if (age == 1)
+            {
+                res = "1 year";
+            }
+            else if (age > 1)
+            {
+                res = $"{age} years";
+            }
+            else if (months == 1)
+            {
+                res = "1 month";
+            }
+            else if (months > 1)
+            {
+                res = $"{months} months";
+            }
+            return res;
         }
         private bool AnimalExists(int id)
         {

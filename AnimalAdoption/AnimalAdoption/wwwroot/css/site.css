@@ -24,6 +24,7 @@ html {
   background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.5)), url('../images/website/background.webp');
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
 }
 
 .navbar-nav .nav-link {
