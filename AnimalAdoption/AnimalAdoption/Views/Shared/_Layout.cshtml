@@ -9,7 +9,7 @@
 
 </head>
 <body>
-<div class="banner">
+<div class="@(Context.Request.Path == "/" || Context.Request.Path == "/Animals" || Context.Request.Path == "/Identity/Account/Register" || Context.Request.Path == "/Identity/Account/Login" ? "banner" : "")">
 
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-transparent box-shadow mb-3">
@@ -22,7 +22,7 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1 navbar-brand">
                     <li class="nav-item ms-auto">
-                        <a class="nav-link text-white me-5 fs-3" asp-area="" asp-controller="Animals" asp-action="Index">Adopt</a>
+                        <a class="nav-link me-5 fs-3 @(Context.Request.Path == "/" || Context.Request.Path == "/Animals" || Context.Request.Path == "/Identity/Account/Register" || Context.Request.Path == "/Identity/Account/Login" ? "text-white" : "text-black")" asp-area="" asp-controller="Animals" asp-action="Index">Adopt</a>
                     </li>
                     <partial name="_LoginPartial"/>
                 </ul>
