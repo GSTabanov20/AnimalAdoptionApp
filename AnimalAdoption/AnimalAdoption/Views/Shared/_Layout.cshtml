@@ -12,17 +12,18 @@
 <div class="@(Context.Request.Path == "/" || Context.Request.Path == "/Animals" || Context.Request.Path == "/Identity/Account/Register" || Context.Request.Path == "/Identity/Account/Login" ? "banner" : "")">
 
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-transparent box-shadow mb-3">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-transparent box-shadow fixed-top">
         <div class="container-fluid">
             <a href="/"><img class="ms-3" src="~/favicon.ico" alt="logo" width="70" height="70"></a>
+            <!-- Burger menu -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon @(Context.Request.Path == "/" || Context.Request.Path == "/Animals" || Context.Request.Path == "/Identity/Account/Register" || Context.Request.Path == "/Identity/Account/Login" ? "" : "black-lines")"></span>
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1 navbar-brand">
                     <li class="nav-item ms-auto">
-                        <a class="nav-link me-5 fs-3 @(Context.Request.Path == "/" || Context.Request.Path == "/Animals" || Context.Request.Path == "/Identity/Account/Register" || Context.Request.Path == "/Identity/Account/Login" ? "text-white" : "text-black")" asp-area="" asp-controller="Animals" asp-action="Index">Adopt</a>
+                        <a class="nav-link me-5 fs-3 fw-bold" style="color: #7ce7bf;" asp-area="" asp-controller="Animals" asp-action="Index">Adopt</a>
                     </li>
                     <partial name="_LoginPartial"/>
                 </ul>
@@ -30,8 +31,8 @@
         </div>
     </nav>
 </header>
-<div class="container">
-    <main role="main" class="pb-3">
+<div class="container pt-5">
+    <main role="main" class="pb-3 pt-5">
         @RenderBody()
     </main>
 </div>
