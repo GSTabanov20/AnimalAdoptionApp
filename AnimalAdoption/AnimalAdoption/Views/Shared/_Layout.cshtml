@@ -12,7 +12,7 @@
 <div class="@(Context.Request.Path == "/" || Context.Request.Path == "/Animals" || Context.Request.Path == "/Identity/Account/Register" || Context.Request.Path == "/Identity/Account/Login" ? "banner" : "")">
 
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-transparent box-shadow fixed-top">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light box-shadow fixed-top" style="background-color: #4CAF50">
         <div class="container-fluid">
             <a href="/"><img class="ms-3" src="~/favicon.ico" alt="logo" width="70" height="70"></a>
             <!-- Burger menu -->
@@ -23,7 +23,7 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1 navbar-brand">
                     <li class="nav-item ms-auto">
-                        <a class="nav-link me-5 fs-3 fw-bold" style="color: #7ce7bf;" asp-area="" asp-controller="Animals" asp-action="Index">Adopt</a>
+                        <a class="nav-link me-5 fs-3 fw-bold text-white" asp-area="" asp-controller="Animals" asp-action="Index">Adopt</a>
                     </li>
                     <partial name="_LoginPartial"/>
                 </ul>
@@ -31,7 +31,7 @@
         </div>
     </nav>
 </header>
-<div class="container pt-5">
+<div class="container pt-5 mt-5">
     <main role="main" class="pb-3 pt-5">
         @RenderBody()
     </main>
