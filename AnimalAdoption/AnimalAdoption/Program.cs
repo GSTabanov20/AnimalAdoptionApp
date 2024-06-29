@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using AnimalAdoption.Data;
 using AnimalAdoption.Models;
+using AnimalAdoption.Services;
 
 namespace AnimalAdoption;
 
@@ -21,7 +22,16 @@ public class Program
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
+        builder.Services.AddScoped<SignInManager<User>, CustomSignInManager>();
+        
         builder.Services.AddControllersWithViews();
+
+        builder.Services.AddAuthentication();
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("RequireAdmin", policy => policy.RequireAssertion(context =>
+                context.User.HasClaim(claim => claim.Type == "IsAdmin" && claim.Value == "true")));
+        });
         
         var app = builder.Build();
 

@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AnimalAdoption.Data;
 using AnimalAdoption.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AnimalAdoption.Controllers
 {
+    [Authorize]
     public class AnimalsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -17,12 +19,14 @@ namespace AnimalAdoption.Controllers
         }
 
         // GET: Animals
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Animals.ToListAsync());
         }
 
         // GET: Animals/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -41,16 +45,16 @@ namespace AnimalAdoption.Controllers
         }
 
         // GET: Animals/Create
+        [Authorize(Policy = "RequireAdmin")]
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Animals/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequireAdmin")]
         public async Task<IActionResult> Create([Bind("Id,Name,DateOfBirth,Species,Gender,Description,IsAdopted,IsAdmin")] Animal animal, IFormFile imageFile)
         {
             if (ModelState.IsValid)
@@ -59,8 +63,8 @@ namespace AnimalAdoption.Controllers
                 {
                     var fileName = Guid.NewGuid() + Path.GetExtension(imageFile.FileName);
                     var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images/animals", fileName);
-                    
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+
+                    await using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await imageFile.CopyToAsync(stream);
                     }
@@ -74,6 +78,7 @@ namespace AnimalAdoption.Controllers
         }
 
         // GET: Animals/Edit/5
+        [Authorize(Policy = "RequireAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,6 +97,7 @@ namespace AnimalAdoption.Controllers
         // POST: Animals/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequireAdmin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DateOfBirth,Species,Gender,Description,IsAdopted,IsAdmin")] Animal animal, IFormFile imageFile)
         {
             if (id != animal.Id)
@@ -107,8 +113,8 @@ namespace AnimalAdoption.Controllers
                     {
                         var fileName = Guid.NewGuid() + Path.GetExtension(imageFile.FileName);
                         var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images/animals", fileName);
-                    
-                        using (var stream = new FileStream(filePath, FileMode.Create))
+
+                        await using (var stream = new FileStream(filePath, FileMode.Create))
                         {
                             await imageFile.CopyToAsync(stream);
                         }
@@ -134,6 +140,7 @@ namespace AnimalAdoption.Controllers
         }
 
         // GET: Animals/Delete/5
+        [Authorize(Policy = "RequireAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -152,6 +159,7 @@ namespace AnimalAdoption.Controllers
         }
 
         // POST: Animals/Delete/5
+        [Authorize(Policy = "RequireAdmin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
