@@ -1,43 +1,42 @@
 @model AnimalAdoption.Models.Animal
 @using AnimalAdoption.Controllers
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> UserManager
 
-<h1>Details</h1>
+@{
+    var user = UserManager.GetUserAsync(User).Result;
+    var isAdmin = user?.IsAdmin ?? false;
+}
 
-<div>
-    <h4>Animal</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">Name</dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">Age</dt>
-        <dd class = "col-sm-10">
-            @AnimalsController.CalculateAge(Model.DateOfBirth)
-        </dd>
-        <dt class = "col-sm-2">Species</dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Species)
-        </dd>
-        <dt class = "col-sm-2">Gender</dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gender)
-        </dd>
-        <dt class = "col-sm-2">Description</dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">Image</dt>
-        <dd class = "col-sm-10">
-            <img src="~/images/animals/@Model.Image" alt="image" width="150" height="150">
-        </dd>
-        <dt class = "col-sm-2">Is adopted</dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsAdopted)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="~/images/animals/@Model.Image" alt="image of @Model.Name" class="img-fluid rounded mb-3">
+        </div>
+        <div class="col-md-8">
+            <h1 class="display-4">@Html.DisplayFor(model => model.Name)</h1>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <strong>Age: </strong>@AnimalsController.CalculateAge(Model.DateOfBirth)
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Gender: </strong>@Html.DisplayFor(model => model.Gender)
+                </li>
+                <li class="list-group-item">
+                    <strong>Description: </strong>@Html.DisplayFor(model => model.Description)
+                </li>
+                <li class="list-group-item">
+                    <strong>Is Adopted: </strong>@Html.DisplayFor(model => model.IsAdopted)
+                </li>
+            </ul>
+            <div class="mt-3">
+                @if (isAdmin)
+                {
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                }
+                <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+            </div>
+        </div>
+    </div>
 </div>
