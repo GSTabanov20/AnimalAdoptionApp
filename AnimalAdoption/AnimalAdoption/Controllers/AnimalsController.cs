@@ -59,17 +59,14 @@ namespace AnimalAdoption.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (imageFile != null)
-                {
-                    var fileName = Guid.NewGuid() + Path.GetExtension(imageFile.FileName);
-                    var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images/animals", fileName);
+                var fileName = Guid.NewGuid() + Path.GetExtension(imageFile.FileName);
+                var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "animals", fileName);
 
-                    await using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await imageFile.CopyToAsync(stream);
-                    }
-                    animal.Image = fileName;
+                await using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(stream);
                 }
+                animal.Image = fileName;
                 _context.Add(animal);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -98,7 +95,7 @@ namespace AnimalAdoption.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "RequireAdmin")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DateOfBirth,Species,Gender,Description,IsAdopted,IsAdmin")] Animal animal, IFormFile imageFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DateOfBirth,Species,Gender,Description,IsAdopted,IsAdmin")] Animal animal, IFormFile? imageFile)
         {
             if (id != animal.Id)
             {
@@ -109,17 +106,37 @@ namespace AnimalAdoption.Controllers
             {
                 try
                 {
+                    var currentAnimal = await _context.Animals.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
+                    if (currentAnimal == null)
+                    {
+                        return NotFound();
+                    }
+
                     if (imageFile != null)
                     {
                         var fileName = Guid.NewGuid() + Path.GetExtension(imageFile.FileName);
-                        var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images/animals", fileName);
-
+                        var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "animals", fileName);
+                        
                         await using (var stream = new FileStream(filePath, FileMode.Create))
                         {
                             await imageFile.CopyToAsync(stream);
                         }
+
+                        if (currentAnimal.Image != null)
+                        {
+                            var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "animals", currentAnimal.Image);
+                            if (System.IO.File.Exists(oldImagePath))
+                            {
+                                System.IO.File.Delete(oldImagePath);
+                            }
+                        }
                         animal.Image = fileName;
                     }
+                    else
+                    {
+                        animal.Image = currentAnimal.Image;
+                    }
+                
                     _context.Update(animal);
                     await _context.SaveChangesAsync();
                 }
@@ -167,6 +184,16 @@ namespace AnimalAdoption.Controllers
             var animal = await _context.Animals.FindAsync(id);
             if (animal != null)
             {
+                var webRootPath = _webHostEnvironment.WebRootPath;
+                if (animal.Image != null)
+                {
+                    var filePath = Path.Combine(webRootPath, "images", "animals", animal.Image);
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                }
                 _context.Animals.Remove(animal);
             }
 

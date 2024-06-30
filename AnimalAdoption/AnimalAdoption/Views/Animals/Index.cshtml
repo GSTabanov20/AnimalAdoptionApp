@@ -39,7 +39,7 @@ else
 
             <div class="col-md-4 mb-4 mt-5">
                 <div class="card h-100">
-                    <img src="~/images/animals/@item.Image" class="card-img-top" alt="image of @item.Name" style="height: 250px; object-fit: cover;">
+                    <img src="~/images/animals/@item.Image" class="card-img-top" alt="animal" style="height: 250px; object-fit: cover;">
                     <div class="card-body">
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
                         <p class="card-text">Age: @AnimalsController.CalculateAge(item.DateOfBirth)</p>
