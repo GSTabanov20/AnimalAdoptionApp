@@ -1,0 +1,38 @@
+﻿@model System.Collections.Generic.List<AnimalAdoption.Models.AdoptionRequest>
+
+
+<h1>Adoption Requests</h1>
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Animal</th>
+        <th>User</th>
+        <th>Request Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var request in Model)
+    {
+    <tr>
+        <td>@request.Animal.Name</td>
+        <td>@request.User.UserName</td>
+        <td>@request.RequestDate?.ToString("MM/dd/yyyy")</td>
+        <td>@request.Status</td>
+        <td>
+            @if (request.Status == "Pending")
+            {
+            <form asp-action="AcceptRequest" asp-route-id="@request.Id" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-success">Accept</button>
+            </form>
+            <form asp-action="DeclineRequest" asp-route-id="@request.Id" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Decline</button>
+            </form>
+            }
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>

@@ -26,9 +26,10 @@ else
     }
     else
     {
-        <p>
-            <a class="btn btn-primary position-absolute start-50 translate-middle mt-3" asp-action="Create">Create New</a>
-        </p>
+        <div class="d-flex justify-content-center mt-3">
+            <a class="btn btn-primary me-2" asp-action="Create">Create New</a>
+            <a class="btn btn-primary" asp-action="AdoptionRequests">Adoption Requests</a>
+        </div>
     }
 }
 <div class="row">

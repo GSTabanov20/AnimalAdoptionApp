@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using AnimalAdoption.Data;
 using AnimalAdoption.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace AnimalAdoption.Controllers
 {
@@ -11,11 +12,13 @@ namespace AnimalAdoption.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<User> _userManager;
 
-        public AnimalsController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public AnimalsController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, UserManager<User> userManager)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _userManager = userManager;
         }
 
         // GET: Animals
@@ -201,6 +204,96 @@ namespace AnimalAdoption.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Adopt action
+        [HttpPost]
+        public async Task<IActionResult> Adopt(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return Json(new { success = false, message = "User not logged in." });
+            }
+            
+            var animal = await _context.Animals.FindAsync(id);
+            if (animal == null)
+            {
+                return Json(new { success = false, message = "Animal not found." });
+            }
+            
+            bool requestExists = await _context.AdoptionRequests
+                .AnyAsync(ar => ar.AnimalId == id && ar.UserId == user.Id && ar.Status == "Pending");
+            
+            if (requestExists)
+            {
+                return Json(new { success = false, message = "You have already requested to adopt this animal." });
+            }
+            
+            var adoptionRequest = new AdoptionRequest
+            {
+                AnimalId = id,
+                UserId = user.Id,
+                RequestDate = DateTime.Now,
+                Status = "Pending"
+            };
+            
+            _context.AdoptionRequests.Add(adoptionRequest);
+            await _context.SaveChangesAsync();
+            
+            return Json(new { success = true });
+        }
+        
+        // GET: Admin/AdoptionRequests
+        [Authorize(Policy = "RequireAdmin")]
+        public async Task<IActionResult> AdoptionRequests()
+        {
+            var requests = await _context.AdoptionRequests
+                .Include(ar => ar.Animal)
+                .Include(ar => ar.User)
+                .ToListAsync();
+            return View(requests);
+        }
+
+        // POST: Admin/AcceptRequest
+        [Authorize(Policy = "RequireAdmin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AcceptRequest(int id)
+        {
+            var request = await _context.AdoptionRequests.FindAsync(id);
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            request.Status = "Approved";
+            var animal = await _context.Animals.FindAsync(request.AnimalId);
+            if (animal != null)
+            {
+                animal.IsAdopted = true;
+            }
+            
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(AdoptionRequests));
+        }
+
+        // POST: Admin/DeclineRequest
+        [Authorize(Policy = "RequireAdmin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeclineRequest(int id)
+        {
+            var request = await _context.AdoptionRequests.FindAsync(id);
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            request.Status = "Rejected";
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(AdoptionRequests));
+        }
+        
         public static string CalculateAge(DateOnly dateOfBirth)
         {
             var today = DateOnly.FromDateTime(DateTime.Today);
@@ -231,13 +324,14 @@ namespace AnimalAdoption.Controllers
             {
                 res = $"{age} years";
             }
-            else if (months == 1)
+            
+            if (months == 1)
             {
-                res = "1 month";
+                res += " 1 month";
             }
             else if (months > 1)
             {
-                res = $"{months} months";
+                res += $" {months} months";
             }
             return res;
         }
