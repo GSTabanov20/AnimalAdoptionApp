@@ -8,55 +8,39 @@
     var isAdmin = user?.IsAdmin ?? false;
 }
 
-@if (Model.Any())
-{
+<div class="animal-boxes-section">
     <h1 class="text-white text-center mt-5">Available Animals for Adoption</h1>
-}
-else
-{
-    <h1 class="text-white text-center position-absolute top-50 start-50 translate-middle">No animals available for adoption at the moment.</h1>
-}
-@if (isAdmin)
-{
-    if (!Model.Any())
-    {
-        <p>
-            <a class="btn btn-primary position-absolute top-50 start-50 translate-middle mt-5" asp-action="Create">Create New</a>
-        </p>
-    }
-    else
+    @if (isAdmin)
     {
         <div class="d-flex justify-content-center mt-3">
             <a class="btn btn-primary me-2" asp-action="Create">Create New</a>
             <a class="btn btn-primary" asp-action="AdoptionRequests">Adoption Requests</a>
         </div>
     }
-}
-<div class="row">
-    @foreach (var item in Model)
-    {
-        if (!item.IsAdopted)
+    <div class="row">
+        @foreach (var item in Model)
         {
-
-            <div class="col-md-4 mb-4 mt-5">
-                <div class="card h-100">
-                    <img src="~/images/animals/@item.Image" class="card-img-top" alt="animal" style="height: 250px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
-                        <p class="card-text">Age: @AnimalsController.CalculateAge(item.DateOfBirth)</p>
-                        <p class="card-text">Gender: @Html.DisplayFor(modelItem => item.Gender)</p>
+            if (!item.IsAdopted)
+            {
+                <div class="col-md-4 mb-4 mt-5">
+                    <div class="card h-100">
+                        <img src="~/images/animals/@item.Image" class="card-img-top" alt="animal" style="height: 250px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                            <p class="card-text">Age: @AnimalsController.CalculateAge(item.DateOfBirth)</p>
+                            <p class="card-text">Gender: @Html.DisplayFor(modelItem => item.Gender)</p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a class="btn btn-primary mx-auto" asp-action="Details" asp-route-id="@item.Id">View Details</a>
+                            @if (isAdmin)
+                            {
+                                <a class="btn btn-primary mx-auto" asp-action="Edit" asp-route-id="@item.Id">Modify</a>
+                                <a class="btn btn-danger mx-auto" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            }
+                        </div>
                     </div>
-                    <div class="card-footer d-flex justify-content-between">
-                        <a class="btn btn-primary mx-auto" asp-action="Details" asp-route-id="@item.Id">View Details</a>
-                        @if (isAdmin)
-                        {
-                            <a class="btn btn-primary mx-auto" asp-action="Edit" asp-route-id="@item.Id">Modify</a>
-                            <a class="btn btn-danger mx-auto" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                        }
-                    </div>
-
                 </div>
-            </div>
+            }
         }
-    }
+    </div>
 </div>
