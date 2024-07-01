@@ -37,64 +37,10 @@
                 }
                 else if (user != null)
                 {
-                    <a class="btn btn-danger" href="@Url.Action("Adopt", new { id = Model.Id })">Adopt</a>
+                    <a class="btn btn-danger" asp-action="AdoptForm" asp-route-id="@Model.Id">Adopt</a>
                 }
                 <a class="btn btn-secondary" asp-action="Index">Back to List</a>
             </div>
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="adoptModal" tabindex="-1" aria-labelledby="adoptModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="adoptModalLabel">Adoption Request</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Your adoption request has been sent. You can monitor your email for any update.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-@section Scripts {
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        $(document).ready(function()
-        {
-            $(".btn-danger").click(function(event)
-            {
-                event.preventDefault();
-                var url = $(this).attr("href");
-
-                $.ajax(
-                {
-                    url: url,
-                    type: "POST",
-                    success: function(response)
-                    {
-                        if (response.success)
-                        {
-                            $('#adoptModal').modal('show');
-                        }
-                        else
-                        {
-                            alert(response.message);
-                        }
-                    },
-                    error: function()
-                    {
-                        alert("There was an error sending your request.");
-                    }
-                });
-            });
-        });
-    </script>
-}

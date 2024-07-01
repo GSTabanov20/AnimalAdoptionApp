@@ -9,6 +9,16 @@ namespace AnimalAdoption.Data
         public DbSet<Animal> Animals { get; set; }
         public DbSet<AdoptionRequest> AdoptionRequests { get; set; }
         
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<AdoptionRequest>(entity =>
+            {
+                entity.Property(e => e.FormAnswers).HasColumnType("json");
+            });
+        }
+        
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

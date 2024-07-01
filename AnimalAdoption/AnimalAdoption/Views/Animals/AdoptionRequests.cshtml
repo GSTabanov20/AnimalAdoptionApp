@@ -1,5 +1,5 @@
 ﻿@model System.Collections.Generic.List<AnimalAdoption.Models.AdoptionRequest>
-
+@using System.Text.Json
 
 <h1>Adoption Requests</h1>
 
@@ -11,6 +11,7 @@
         <th>Request Date</th>
         <th>Status</th>
         <th>Actions</th>
+        <th>View Answers</th>
     </tr>
     </thead>
     <tbody>
@@ -24,13 +25,51 @@
         <td>
             @if (request.Status == "Pending")
             {
-            <form asp-action="AcceptRequest" asp-route-id="@request.Id" method="post" style="display:inline;">
-                <button type="submit" class="btn btn-success">Accept</button>
-            </form>
-            <form asp-action="DeclineRequest" asp-route-id="@request.Id" method="post" style="display:inline;">
-                <button type="submit" class="btn btn-danger">Decline</button>
-            </form>
+                <form asp-action="AcceptRequest" asp-route-id="@request.Id" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-success">Accept</button>
+                </form>
+                <form asp-action="DeclineRequest" asp-route-id="@request.Id" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Decline</button>
+                </form>
             }
+        </td>
+        <td>
+            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#viewAnswersModal-@request.Id">
+                View Answers
+            </button>
+
+            <div class="modal fade" id="viewAnswersModal-@request.Id" tabindex="-1" aria-labelledby="viewAnswersModalLabel-@request.Id" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="viewAnswersModalLabel-@request.Id">Adoption Request Answers</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            @{
+                                if (!string.IsNullOrEmpty(request.FormAnswers))
+                                {
+                                    var answers = JsonSerializer.Deserialize<Dictionary<string, string>>(request.FormAnswers);
+                                    if (answers != null)
+                                    {
+                                        foreach (var answer in answers)
+                                            { 
+                                                <p><strong>@answer.Key:</strong> @answer.Value</p>
+                                            }
+                                    }
+                                }
+                                else
+                                {
+                                    <p>No answers provided.</p>
+                                }
+                            }
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </td>
     </tr>
     }

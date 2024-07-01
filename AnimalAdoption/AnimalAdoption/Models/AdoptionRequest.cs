@@ -8,6 +8,7 @@ public class AdoptionRequest
     public string UserId { get; set; } = null!;
     public DateTime? RequestDate { get; set; }
     public string Status { get; set; } = "Pending";
+    public string FormAnswers { get; set; } = null!;
     
     // Navigation properties
     public Animal Animal { get; set; } = null!;

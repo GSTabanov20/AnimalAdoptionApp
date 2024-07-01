@@ -4,6 +4,7 @@ using AnimalAdoption.Data;
 using AnimalAdoption.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Text.Json;
 
 namespace AnimalAdoption.Controllers
 {
@@ -241,6 +242,54 @@ namespace AnimalAdoption.Controllers
             await _context.SaveChangesAsync();
             
             return Json(new { success = true });
+        }
+        
+        // GET: Animals/AdoptForm/5
+        public async Task<IActionResult> AdoptForm(int id)
+        {
+            var animal = await _context.Animals.FindAsync(id);
+            if (animal == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+
+            var adoptionRequest = new AdoptionRequest
+            {
+                AnimalId = animal.Id,
+                UserId = user.Id
+            };
+
+            return View(adoptionRequest);
+        }
+        
+        // POST: Animals/SubmitAdoptForm
+        [HttpPost]
+        public async Task<IActionResult> SubmitAdoptForm(int animalId, string question1, string question2, string question3)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var formAnswers = new
+            {
+                question1,
+                question2,
+                question3
+            };
+
+            var adoptionRequest = new AdoptionRequest
+            {
+                AnimalId = animalId,
+                UserId = user.Id,
+                RequestDate = DateTime.Now,
+                Status = "Pending",
+                FormAnswers = JsonSerializer.Serialize(formAnswers)
+            };
+
+            _context.AdoptionRequests.Add(adoptionRequest);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = animalId });
         }
         
         // GET: Admin/AdoptionRequests
