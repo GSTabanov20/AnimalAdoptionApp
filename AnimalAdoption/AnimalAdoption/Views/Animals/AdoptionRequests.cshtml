@@ -20,7 +20,7 @@
     <tr>
         <td>@request.Animal.Name</td>
         <td>@request.User.UserName</td>
-        <td>@request.RequestDate?.ToString("MM/dd/yyyy")</td>
+        <td>@request.RequestDate?.ToString("dd/MM/yyyy")</td>
         <td>@request.Status</td>
         <td>
             @if (request.Status == "Pending")

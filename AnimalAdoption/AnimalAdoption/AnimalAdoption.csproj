@@ -23,6 +23,7 @@
       <_ContentIncludedByDefault Remove="Views\AnimalsAdoption\Details.cshtml" />
       <_ContentIncludedByDefault Remove="Views\AnimalsAdoption\Edit.cshtml" />
       <_ContentIncludedByDefault Remove="Views\AnimalsAdoption\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\site.js" />
     </ItemGroup>
 
     <ItemGroup>

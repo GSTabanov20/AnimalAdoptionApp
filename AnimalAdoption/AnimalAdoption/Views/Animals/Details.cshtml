@@ -26,16 +26,13 @@
                 <li class="list-group-item">
                     <strong>Description: </strong>@Html.DisplayFor(model => model.Description)
                 </li>
-                <li class="list-group-item">
-                    <strong>Is Adopted: </strong>@Html.DisplayFor(model => model.IsAdopted)
-                </li>
             </ul>
             <div class="mt-3">
                 @if (isAdmin)
                 {
                     <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
                 }
-                else if (user != null)
+                else if (!Model.IsAdopted && user != null)
                 {
                     <a class="btn btn-danger" asp-action="AdoptForm" asp-route-id="@Model.Id">Adopt</a>
                 }
