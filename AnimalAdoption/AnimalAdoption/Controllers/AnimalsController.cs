@@ -204,45 +204,6 @@ namespace AnimalAdoption.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-        // Adopt action
-        [HttpPost]
-        public async Task<IActionResult> Adopt(int id)
-        {
-            var user = await _userManager.GetUserAsync(User);
-
-            if (user == null)
-            {
-                return Json(new { success = false, message = "User not logged in." });
-            }
-            
-            var animal = await _context.Animals.FindAsync(id);
-            if (animal == null)
-            {
-                return Json(new { success = false, message = "Animal not found." });
-            }
-            
-            bool requestExists = await _context.AdoptionRequests
-                .AnyAsync(ar => ar.AnimalId == id && ar.UserId == user.Id && ar.Status == "Pending");
-            
-            if (requestExists)
-            {
-                return Json(new { success = false, message = "You have already requested to adopt this animal." });
-            }
-            
-            var adoptionRequest = new AdoptionRequest
-            {
-                AnimalId = id,
-                UserId = user.Id,
-                RequestDate = DateTime.Now,
-                Status = "Pending"
-            };
-            
-            _context.AdoptionRequests.Add(adoptionRequest);
-            await _context.SaveChangesAsync();
-            
-            return Json(new { success = true });
-        }
         
         // GET: Animals/AdoptForm/5
         public async Task<IActionResult> AdoptForm(int id)
