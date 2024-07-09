@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/codingburgas/2324-pp-11v-1-GSTabanov20/blob/main/AnimalAdoption/AnimalAdoption/wwwroot/favicon.ico" alt="Logo" width="250" height="250">
+  <img src="https://github.com/GSTabanov20/AnimalAdoptionApp/blob/main/AnimalAdoption/AnimalAdoption/wwwroot/favicon.ico" alt="Logo" width="250" height="250">
 </p>
 
 # 🐾 Animal Adoption
@@ -32,9 +32,9 @@ The Animal Adoption Centre is dedicated to helping animals find loving homes. Ou
 
 ## 📥 Download
 
-To download our project clone our repository, pasting this text in your command prompt:
+To download my project clone the repository by pasting this text in your command prompt:
 
-    git clone https://github.com/codingburgas/2324-pp-11v-1-GSTabanov20.git
+    git clone https://github.com/GSTabanov20/AnimalAdoptionApp.git
 
 ## 🚀 Usage
 
